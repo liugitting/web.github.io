@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <title>工程测量曲线计算实习</title>
+</head>
+
+<body>
+    <header>
+        <h1>工程测量曲线计算</h1>
+    </header>
+
+    <div class="container-three-columns">
+
+    </div>
+    <div class="left-column-three">
+        <table border="1" cellspacing="0">
+            <tbody align="center" valign="center">
+                <tr>
+                    <th>已知参数</th>
+                    <th>值</th>
+                </tr>
+                <tr>
+                    <td>圆曲线半径R</td>
+                    <td id="R">700</td>
+                </tr>
+                <tr>
+                    <td>缓和曲线长Ls</td>
+                    <td id="Ls">100</td>
+                </tr>
+                <tr>
+                    <td>JD里程</td>
+                    <td id="JD_m">DK14+ 906.807</td>
+                </tr>
+                <tr>
+                    <td>JD_X</td>
+                    <td id="JD_x">144534.846</td>
+                </tr>
+                <tr>
+                    <td>JD_Y</td>
+                    <td id="JD_y">99482.202</td>
+                </tr>
+                <tr>
+                    <td>线路转向角&#945</td>
+                    <td id="jiao1">66°01′15 "</td>
+                </tr>
+                <tr>
+                    <td>ZH方向角</td>
+                    <td id="jiao2">273°15′23.4 "</td>
+                </tr>
+                <tr>
+                    <td>偏转方向</td>
+                    <td id="choose">右转</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button id="xiugai" onclick="openModal()">修改</button>
+        <button onclick="calculation()">计算</button>
+        <button id="chazhao" onclick="openModal2()">查找</button>
+    </div>
+    <div class=" middle-column-three">
+        <table border="1" cellspacing="0">
+            <tbody align="center" valign="center">
+                <tr>
+                    <th>重要参数</th>
+                    <th>值</th>
+                </tr>
+                <tr>
+                    <td>m</td>
+                    <td id="m"></td>
+                </tr>
+                <tr>
+                    <td>P</td>
+                    <td id="P"></td>
+                </tr>
+                <tr>
+                    <td>&#946</td>
+                    <td id="beta"></td>
+                </tr>
+                <tr>
+                    <td>切线长TH</td>
+                    <td id="T"> </td>
+                </tr>
+                <tr>
+                    <td>曲线长L</td>
+                    <td id="L"> </td>
+                </tr>
+                <tr>
+                    <td>外矢距EH</td>
+                    <td id="E"> </td>
+                </tr>
+                <tr>
+                    <td>切曲差q</td>
+                    <td id="q"> </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <table border="1" cellspacing="0">
+            <tbody align="center" valign="center">
+                <thead>
+                    <tr>
+                        <th>主点里程</th>
+                        <th>值</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>ZH</td>
+                    <td id="ZH"></td>
+                </tr>
+                <tr>
+                    <td>HY</td>
+                    <td id="HY"> </td>
+                </tr>
+                <tr>
+                    <td>QZ</td>
+                    <td id="QZ"></td>
+                </tr>
+                <tr>
+                    <td>YH</td>
+                    <td id="YH"></td>
+                </tr>
+                <tr>
+                    <td>HZ</td>
+                    <td id="HZ"></td>
+            </tbody>
+        </table>
+    </div>
+    <div class="right-column-three">
+        <table id="point" border="1" cellspacing="0">
+            <tbody align="center" valign="center">
+                <tr>
+                    <th>加密点</th>
+                    <th>里程</th>
+                    <th>X</th>
+                    <th>Y</th>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- 其他内容 -->
+
+    <button id="toggleFooter" style="position: fixed; bottom: 20px; right: 20px;">显示信息</button>
+
+    <div id="popupFooter" class="popup-footer">
+        <p>版权所有 © 刘维康 保留所有权利.</p>
+        <button id="closeFooter">关闭</button>
+    </div>
+
+    <script>
+        const popupFooter = document.getElementById('popupFooter');
+        const toggleFooter = document.getElementById('toggleFooter');
+        const closeFooter = document.getElementById('closeFooter');
+
+        toggleFooter.addEventListener('click', () => {
+            popupFooter.style.display = 'block'; // 显示模块
+        });
+
+        closeFooter.addEventListener('click', () => {
+            popupFooter.style.display = 'none'; // 隐藏模块
+        });
+    </script>
+
+
+
+    <!-- 修改模态框 -->
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>修改参数</h2>
+
+
+            <!-- 第二个表单 -->
+            <label for="parameter2">圆曲线半径R:</label>
+            <input type="number" id="c_R" value="" /><br /><br />
+
+            <!-- 第三个表单 -->
+            <label for="parameter3">缓和曲线长Ls:</label>
+            <input type="number" id="c_L" value="" /><br /><br />
+
+            <!-- 第四个表单 -->
+            <label for="parameter4">JD里程</label>
+            <input type="number" id="c_JDm" value="" /><br /><br />
+
+            <!-- 第五个表单 -->
+            <label for="parameter5">JD_X:</label>
+            <input type="number" id="c_JDx" value="" /><br /><br />
+
+            <!-- 第六个表单 -->
+            <label for="parameter6">JD_Y</label>
+            <input type="number" id="c_JDy" value="" /><br /><br />
+
+            <!-- 第一个表单 -->
+            <label for="degree">线路转向角α:</label>
+            <input type="number" id="degree" placeholder="度" style="width: 60px;" />°
+            <input type="number" id="minute" placeholder="分" style="width: 60px;" />′
+            <input type="number" id="second" placeholder="秒" style="width: 60px;" />″<br /><br />
+
+
+            <!-- 第七个表单 -->
+            <label for="degree2">ZH方向角:</label>
+            <input type="number" id="degree2" placeholder="度" style="width: 60px;" />°
+            <input type="number" id="minute2" placeholder="分" style="width: 60px;" />′
+            <input type="number" id="second2" placeholder="秒" style="width: 60px;" />″<br /><br />
+
+
+            <label>方向角：</label>
+            左偏<input id="choose" type="radio" name="radio1" value=-1 />
+            右偏<input id="choose2" type="radio" name="radio1" value=1 />
+
+            <button class="save-button" onclick="saveChanges()">保存</button>
+            <table>
+                <tr></tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal2()">&times;</span>
+            <h2>查找</h2>
+            <label>查找点里程:</label>
+            <input type="number" id="find_miles" value=""><br></br>
+            <button class="save-button" onclick="find()">确定</button><br></br>
+            <table>
+                <tr>
+                    <th>里程</th>
+                    <th>X</th>
+                    <th>Y</th>
+                </tr>
+                <tr>
+                    <td id="sf_m"></td>
+                    <td id="sf_x"></td>
+                    <td id="sf_y"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+
+<script type="text/javascript" src="caculate.js"></script>
+</body>
+
+
+</html>
